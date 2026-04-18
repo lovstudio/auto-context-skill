@@ -1,56 +1,55 @@
 # AutoContext
 
-Automatic context hygiene for Claude Code sessions.
+Context operator for Claude Code sessions — not just a health check.
 
 ## What It Does
 
-Monitors conversation length. When the transcript gets long, it nudges Claude to assess whether the current context is still relevant — and suggest `/fork` or `/btw` if it's not.
+Three capability layers, routed by action sensitivity:
+
+- **Auto-execute**: writes project memory when it spots unpersisted
+  feedback/preferences; updates `MEMORY.md` index.
+- **Confirm-first**: edits `~/.claude/CLAUDE.md` or project `CLAUDE.md`
+  with a shown diff and explicit "yes" before applying.
+- **Suggest-only**: harness commands like `/fork`, `/compact`, `/btw` —
+  surfaced as exact-paste strings.
 
 ```
-You (turn 1-30): implement auth feature
-You (turn 31):   "now do the payment page"
-                  ↑ AutoContext fires here
-Claude:          "Different domain — I'd suggest /fork for a clean context."
+You (turn 31):  "从今以后所有输出都要带路径"
+                 ↑ AutoContext writes feedback memory automatically
+
+You (turn 45):  "/lovstudio-auto-context 记到全局"
+                 ↑ Shows diff of proposed ~/.claude/CLAUDE.md edit, waits for yes
+
+You (turn 80):  transcript size crosses threshold
+                 ↑ Suggests: paste `/fork` (harness owns this one)
 ```
 
 ## Install
 
-This skill works best with the [lovstudio plugin](https://github.com/lovstudio/claude-code-plugin) which provides the auto-trigger hook. Without the plugin, use `/auto-context` for manual checks.
-
-```bash
-# Skill only (manual mode)
-npx skills add lovstudio/skills --skill lovstudio:auto-context
-
-# Full experience (auto mode + manual mode)
-# Enable the lovstudio plugin in Claude Code
-```
+Works standalone as a manual skill. Auto-trigger on long transcripts
+requires the [lovstudio plugin](https://github.com/lovstudio/claude-code-plugin)
+which registers the `UserPromptSubmit` hook.
 
 ## Manual Use
 
-Type `/auto-context` for a context health report at any time.
-
-## How It Works
-
 ```
-User submits prompt
-        │
-        ▼
- ┌──────────────┐
- │ Hook fires    │── transcript < threshold ──→ silent exit
- │ context_sense │
- └──────┬───────┘
-        │ threshold exceeded
-        ▼
- Inject <auto-context> reminder
-        │
-        ▼
- Claude assesses relevance
-        │
-   ┌────┴────┐
-   ▼         ▼
- Clean?    Polluted?
- Continue  Suggest /fork or /btw
+/lovstudio-auto-context                              # health report + opportunistic memory write
+/lovstudio-auto-context 记到全局                      # edit ~/.claude/CLAUDE.md with confirm
+/lovstudio-auto-context 记到项目                      # edit project CLAUDE.md with confirm
+/lovstudio-auto-context 记住 X                        # write project memory
+/lovstudio-auto-context 该分叉了吗                    # evaluate + suggest /fork
 ```
+
+## What It Cannot Do
+
+Harness-owned commands (`/fork`, `/compact`, `/btw`, `/clear`, new
+session) can't be invoked programmatically. The skill will print the
+exact command for you to paste.
+
+## Version
+
+0.2.0 — adds confirm-first editing of global/project CLAUDE.md and
+auto-write of feedback memory. See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
