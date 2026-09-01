@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0] - 2026-09-01
+
+### Added
+
+- support scoped standing authorization preferences
+- record trigger, target, payload, destination, limits, and revocation without expanding scope
+
 ## [0.3.0] - 2026-05-07
 
 ### Added
