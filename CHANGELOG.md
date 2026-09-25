@@ -1,11 +1,17 @@
 # Changelog
 
-## [0.4.0] - 2026-09-01
+## [0.4.2] - 2026-09-25
 
 ### Added
 
-- support scoped standing authorization preferences
-- record trigger, target, payload, destination, limits, and revocation without expanding scope
+- 合并本地提交与未提交改动到上游 0.4.0 之上
+- 本地改动：统一展示名为「上下文哨兵」，保持调用 ID 与能力契约。
+
+## [0.4.0] - 2026-08-24
+
+### Added
+
+- add the shared feedback-classification and approval-invalidation gate used by every LovStudio Skill
 
 ## [0.3.0] - 2026-05-07
 
