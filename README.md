@@ -1,6 +1,6 @@
 # 上下文哨兵 · Context Sentinel
 
-![Version](https://img.shields.io/badge/version-0.4.2-CC785C)
+![Version](https://img.shields.io/badge/version-0.4.3-CC785C)
 
 Context operator for Claude Code sessions — not just a health check.
 
@@ -31,7 +31,7 @@ You (turn 80):  transcript size crosses threshold
 ## Install
 
 ```bash
-npx skills add auto-context -g -y
+npx lovstudio skills add auto-context -g -y
 ```
 
 Works standalone as a manual skill. Auto-trigger on long transcripts
